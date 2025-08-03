@@ -1,4 +1,7 @@
-<?php if (!defined('ABSPATH')) exit; ?>
+<?php if (!defined('ABSPATH')) exit; 
+
+global $wpdb;
+?>
 
 <div class="wrap jap-settings">
     <div class="jap-header">

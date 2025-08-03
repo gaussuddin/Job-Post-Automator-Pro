@@ -36,28 +36,44 @@ class JobAutomatorPro {
         $this->include_files();
         
         // Initialize admin
-        if (is_admin()) {
+        if (is_admin() && class_exists('JAP_Admin')) {
             new JAP_Admin();
         }
         
         // Initialize AJAX handlers
-        new JAP_Ajax();
+        if (class_exists('JAP_Ajax')) {
+            new JAP_Ajax();
+        }
     }
     
     private function include_files() {
-        require_once JAP_PLUGIN_PATH . 'includes/class-database.php';
-        require_once JAP_PLUGIN_PATH . 'includes/class-admin.php';
-        require_once JAP_PLUGIN_PATH . 'includes/class-ajax.php';
-        require_once JAP_PLUGIN_PATH . 'includes/class-companies.php';
-        require_once JAP_PLUGIN_PATH . 'includes/class-templates.php';
-        require_once JAP_PLUGIN_PATH . 'includes/class-fields.php';
-        require_once JAP_PLUGIN_PATH . 'includes/class-categories.php';
-        require_once JAP_PLUGIN_PATH . 'includes/class-job-generator.php';
+        $files = array(
+            'includes/class-database.php',
+            'includes/class-companies.php',
+            'includes/class-templates.php',
+            'includes/class-fields.php',
+            'includes/class-categories.php',
+            'includes/class-job-generator.php',
+            'includes/class-ajax.php',
+            'includes/class-admin.php'
+        );
+        
+        foreach ($files as $file) {
+            $filepath = JAP_PLUGIN_PATH . $file;
+            if (file_exists($filepath)) {
+                require_once $filepath;
+            }
+        }
     }
     
     public function activate() {
-        JAP_Database::create_tables();
-        JAP_Database::insert_default_data();
+        // Include database class first
+        require_once JAP_PLUGIN_PATH . 'includes/class-database.php';
+        
+        if (class_exists('JAP_Database')) {
+            JAP_Database::create_tables();
+            JAP_Database::insert_default_data();
+        }
     }
     
     public function deactivate() {

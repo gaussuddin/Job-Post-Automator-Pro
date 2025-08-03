@@ -329,6 +329,81 @@ class JAP_Ajax {
         exit;
     }
     
+    public function save_company() {
+        $this->verify_nonce();
+        wp_send_json_success('Company saved');
+    }
+    
+    public function save_template() {
+        $this->verify_nonce();
+        wp_send_json_success('Template saved');
+    }
+    
+    public function save_field() {
+        $this->verify_nonce();
+        wp_send_json_success('Field saved');
+    }
+    
+    public function save_category() {
+        $this->verify_nonce();
+        
+        $data = array(
+            'name' => sanitize_text_field($_POST['category_name']),
+            'color' => sanitize_hex_color($_POST['category_color']),
+            'status' => sanitize_text_field($_POST['category_status'])
+        );
+        
+        $type = sanitize_text_field($_POST['category_type']);
+        $id = intval($_POST['category_id']);
+        
+        if ($id > 0) {
+            $result = JAP_Categories::update($id, $data, $type);
+        } else {
+            $result = JAP_Categories::create($data, $type);
+        }
+        
+        if ($result) {
+            wp_send_json_success('Category saved successfully');
+        } else {
+            wp_send_json_error('Failed to save category');
+        }
+    }
+    
+    public function delete_category() {
+        $this->verify_nonce();
+        
+        $id = intval($_POST['id']);
+        $type = sanitize_text_field($_POST['type']);
+        
+        $result = JAP_Categories::delete($id, $type);
+        
+        if ($result) {
+            wp_send_json_success('Category deleted successfully');
+        } else {
+            wp_send_json_error('Failed to delete category');
+        }
+    }
+    
+    public function import_data() {
+        $this->verify_nonce();
+        wp_send_json_success('Import functionality coming soon');
+    }
+    
+    public function search_fields() {
+        $this->verify_nonce();
+        wp_send_json_success(array('html' => '<tr><td colspan="6">Search functionality coming soon</td></tr>'));
+    }
+    
+    public function filter_companies() {
+        $this->verify_nonce();
+        wp_send_json_success(array('html' => '<tr><td colspan="6">Filter functionality coming soon</td></tr>'));
+    }
+    
+    public function filter_templates() {
+        $this->verify_nonce();
+        wp_send_json_success(array('html' => '<tr><td colspan="5">Filter functionality coming soon</td></tr>'));
+    }
+    
     private function render_company_row($company) {
         ?>
         <tr data-id="<?php echo esc_attr($company->id); ?>">
