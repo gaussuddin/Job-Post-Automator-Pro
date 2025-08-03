@@ -112,22 +112,42 @@ class JAP_Admin {
     
     public function dashboard_page() {
         $stats = JAP_Database::get_stats();
-        include JAP_PLUGIN_PATH . 'templates/dashboard.php';
+        $template_file = JAP_PLUGIN_PATH . 'templates/dashboard.php';
+        
+        if (file_exists($template_file)) {
+            include $template_file;
+        } else {
+            echo '<div class="wrap"><h1>Job Automator Pro Dashboard</h1><p>Dashboard template not found.</p></div>';
+        }
     }
     
     public function companies_page() {
         $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : 'list';
         $company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         
+        $template_file = JAP_PLUGIN_PATH . 'templates/companies-list.php';
+        
         switch ($action) {
             case 'add':
-                include JAP_PLUGIN_PATH . 'templates/companies-add.php';
+                $add_file = JAP_PLUGIN_PATH . 'templates/companies-add.php';
+                if (file_exists($add_file)) {
+                    include $add_file;
+                } else {
+                    include $template_file; // Fallback to list
+                }
                 break;
             case 'edit':
-                include JAP_PLUGIN_PATH . 'templates/companies-edit.php';
+                $edit_file = JAP_PLUGIN_PATH . 'templates/companies-edit.php';
+                if (file_exists($edit_file)) {
+                    include $edit_file;
+                } else {
+                    include $template_file; // Fallback to list
+                }
                 break;
             default:
-                include JAP_PLUGIN_PATH . 'templates/companies-list.php';
+                if (file_exists($template_file)) {
+                    include $template_file;
+                }
                 break;
         }
     }
@@ -136,15 +156,29 @@ class JAP_Admin {
         $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : 'list';
         $template_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         
+        $template_file = JAP_PLUGIN_PATH . 'templates/templates-list.php';
+        
         switch ($action) {
             case 'add':
-                include JAP_PLUGIN_PATH . 'templates/templates-add.php';
+                $add_file = JAP_PLUGIN_PATH . 'templates/templates-add.php';
+                if (file_exists($add_file)) {
+                    include $add_file;
+                } else {
+                    include $template_file; // Fallback to list
+                }
                 break;
             case 'edit':
-                include JAP_PLUGIN_PATH . 'templates/templates-edit.php';
+                $edit_file = JAP_PLUGIN_PATH . 'templates/templates-edit.php';
+                if (file_exists($edit_file)) {
+                    include $edit_file;
+                } else {
+                    include $template_file; // Fallback to list
+                }
                 break;
             default:
-                include JAP_PLUGIN_PATH . 'templates/templates-list.php';
+                if (file_exists($template_file)) {
+                    include $template_file;
+                }
                 break;
         }
     }
@@ -153,21 +187,41 @@ class JAP_Admin {
         $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : 'list';
         $field_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         
+        $template_file = JAP_PLUGIN_PATH . 'templates/fields-list.php';
+        
         switch ($action) {
             case 'add':
-                include JAP_PLUGIN_PATH . 'templates/fields-add.php';
+                $add_file = JAP_PLUGIN_PATH . 'templates/fields-add.php';
+                if (file_exists($add_file)) {
+                    include $add_file;
+                } else {
+                    include $template_file; // Fallback to list
+                }
                 break;
             case 'edit':
-                include JAP_PLUGIN_PATH . 'templates/fields-edit.php';
+                $edit_file = JAP_PLUGIN_PATH . 'templates/fields-edit.php';
+                if (file_exists($edit_file)) {
+                    include $edit_file;
+                } else {
+                    include $template_file; // Fallback to list
+                }
                 break;
             default:
-                include JAP_PLUGIN_PATH . 'templates/fields-list.php';
+                if (file_exists($template_file)) {
+                    include $template_file;
+                }
                 break;
         }
     }
     
     public function categories_page() {
-        include JAP_PLUGIN_PATH . 'templates/categories.php';
+        $template_file = JAP_PLUGIN_PATH . 'templates/categories.php';
+        
+        if (file_exists($template_file)) {
+            include $template_file;
+        } else {
+            echo '<div class="wrap"><h1>Categories Management</h1><p>Categories template not found.</p></div>';
+        }
     }
     
     public function settings_page() {
@@ -175,7 +229,14 @@ class JAP_Admin {
             // Handle settings save
             $this->save_settings();
         }
-        include JAP_PLUGIN_PATH . 'templates/settings.php';
+        
+        $template_file = JAP_PLUGIN_PATH . 'templates/settings.php';
+        
+        if (file_exists($template_file)) {
+            include $template_file;
+        } else {
+            echo '<div class="wrap"><h1>Plugin Settings</h1><p>Settings template not found.</p></div>';
+        }
     }
     
     private function save_settings() {
